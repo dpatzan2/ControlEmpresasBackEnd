@@ -1,0 +1,1 @@
+const Sucursales = require('../models/sucursales.model')

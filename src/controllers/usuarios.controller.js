@@ -1,4 +1,4 @@
-const Usuarios = require('../models/usuarios.model')
+    const Usuarios = require('../models/usuarios.model')
 const brycpt = require('bcrypt-nodejs');
 const jwt = require('../services/jwt')
 
