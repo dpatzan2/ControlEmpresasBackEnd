@@ -1,4 +1,4 @@
-    const Usuarios = require('../models/usuarios.model')
+const Usuarios = require('../models/usuarios.model')
 const brycpt = require('bcrypt-nodejs');
 const jwt = require('../services/jwt')
 
@@ -34,27 +34,27 @@ function ObtenerUsuarios(req, res) {
 
 //METODO PARA PODER INICIAR SESION
 function Login(req, res) {
-    var parametros = req.body;
-    Usuarios.findOne({usuario: parametros.usuario}, (err, usuarioEcontrado) =>{
-        if(err) return res.status(500).send({message: 'Error en la peticion'});
-        if(usuarioEcontrado){
-            brycpt.compare(parametros.password, usuarioEcontrado.password, (err, verificacionPassword)=>{
-                if(verificacionPassword){
-                    if(parametros.obtenerToken === 'true'){
-                        return res.status(500).send({token: jwt.crearToken(usuarioEcontrado)});
-                    }else{
-                        usuarioEcontrado.password = undefined;
-                        return res.status(200).send({usuario: usuarioEcontrado});
+    var parameters = req.body
+    Usuarios.findOne({ usuario: parameters.usuario }, (err, usuarioLogeado) => {
+        if (err) return res.status(500).send({ message: 'error en la peticion' })
+        if (usuarioLogeado) {
+            brycpt.compare(parameters.password, usuarioLogeado.password,
+                (err, passwordComparacion) => {
+                    if (passwordComparacion) {
+                        if (parameters.obtenerToken === 'true') {
+                            return res.status(200).send({ token: jwt.crearToken(usuarioLogeado) })
+                        } else {
+                            usuarioLogeado.password = undefined;
+                            return res.status(200).send({ usuario: usuarioLogeado })
+                        }
+                    } else {
+                        return res.status(404).send({ message: "contrasena no coincide" });
                     }
-                }else{
-                    return res.status(500).send({message: 'la contraseña no coincide'});
-                }
-            });
-
-        }else{
-            return res.status(500).send({mensaje: 'El correo no se encuentra registrado'});
+                })
+        } else {
+            return res.status(404).send({ message: "Error, datos erroneos" });
         }
-    });
+    })
 }
 
 function RegistrarEmpresas(req, res){

@@ -6,6 +6,7 @@ var Schema=mongoose.Schema;
 var sucursalesSchema = Schema({
     nombreSucursal: String,
     direccionSucursal: String,
+    telefono: String,
     idEmpresa: { type: Schema.Types.ObjectId, ref: 'usuarios'}
 })
 

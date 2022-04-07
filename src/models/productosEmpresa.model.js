@@ -12,4 +12,4 @@ var productosEmpresaSchema = Schema({
     idEmpresa: { type: Schema.Types.ObjectId, ref: 'usuarios'}
 })
 
-module.exports=mongoose.model('productosEmpresa',productosEmpresaSchema)
+module.exports=mongoose.model('productos',productosEmpresaSchema)

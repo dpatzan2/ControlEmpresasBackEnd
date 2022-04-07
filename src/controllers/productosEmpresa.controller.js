@@ -5,7 +5,7 @@ function ObtenerProductosEmpresa(req, res) {
 
     var idEmpre = req.params.idEmpresa;
     if(req.user.rol == 'Empresa'){
-        Productos.findOne({idEmpresa: req.user.sub}, (err, productoEncontrado) => {
+        Productos.find({idEmpresa: req.user.sub}, (err, productoEncontrado) => {
             if (err) return res.status(500).send({ mensaje: 'Error en la peticion' });
             if (!productoEncontrado) return res.status(404).send( { mensaje: 'Esta empresa no tiene productos registrados aun' });
     
@@ -26,7 +26,7 @@ function ObtenerProductosEmpresa(req, res) {
 function agregarProductoEmpresa(req, res){
     var parametros = req.body;
     var ProductosEmpresaModelo = new Productos();
-    if(parametros.NombreProducto && parametros.descripcion && parametros.NombreProveedor && parametros.Stock && parametros.idEmpresa){
+    if(parametros.NombreProducto && parametros.descripcion && parametros.NombreProveedor && parametros.Stock){
         ProductosEmpresaModelo.NombreProducto = parametros.NombreProducto;
         ProductosEmpresaModelo.descripcion = parametros.descripcion;
         ProductosEmpresaModelo.NombreProveedor = parametros.NombreProveedor;
@@ -42,7 +42,7 @@ function agregarProductoEmpresa(req, res){
                 ProductosEmpresaModelo.save((err, ProductoGuardado)=>{
                     if(err) return res.status(500).send({message: 'Error en la peticion'});
                     if(!ProductoGuardado) return res.status(404).send({message: 'No se encontraron productos para esta empresa'});
-                    
+                   console.log(productoEncontrado)
                     return res.status(200).send({Productos: ProductoGuardado});
                 });
             }else{
@@ -50,6 +50,9 @@ function agregarProductoEmpresa(req, res){
             }
         });
         
+    } else{
+        console.log('no se guarda')
+        return res.status(500).send({message: 'Error en la peticion'});
     }
 }
 

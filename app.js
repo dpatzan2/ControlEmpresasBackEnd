@@ -6,6 +6,7 @@ var app = express();
 //IMPORTACIONES RUTAS
 const rutaEmpresa = require('./src/routes/empresas.routes');
 const rutaProductosEmpresa = require('./src/routes/productosEmpresa.routes')
+const rutaSucursales = require('./src/routes/sucursales.routes')
 
 //MIDDLEWARES
 app.use(express.urlencoded({extended: false}));
@@ -16,7 +17,7 @@ app.use(express.json());
 app.use(cors());
 
 //CARGA DE RUTAS se realizaba como localhost:3000/obtenerProductos
-app.use('/api', rutaEmpresa, rutaProductosEmpresa);
+app.use('/api', rutaEmpresa, rutaProductosEmpresa,rutaSucursales);
 
 
 module.exports = app; 
