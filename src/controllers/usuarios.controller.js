@@ -41,6 +41,7 @@ function ObtenerUsuariosId(req, res) {
         })
 }
 
+
 //METODO PARA PODER INICIAR SESION
 function Login(req, res) {
     var parameters = req.body
@@ -69,6 +70,7 @@ function Login(req, res) {
 function RegistrarEmpresas(req, res){
     var parametros = req.body;
     var usuarioModelo = new Usuarios();
+
     if (parametros.nombre  && parametros.usuario && parametros.password && parametros.tipoEmpresa) {
         usuarioModelo.nombre = parametros.nombre;
         usuarioModelo.tipoEmpresa = parametros.tipoEmpresa
@@ -135,12 +137,30 @@ function AgregarEmpresasDesdeAdmin(req, res){
 function EditarUsuarios(req, res) {
     var idUsu = req.params.idUsuario;
     var parametros = req.body;
-    Usuarios.findByIdAndUpdate(idUsu, parametros, {new: true}, (err, usuarioActualizado) => {
-        if(err) return res.status(500).send({message: 'Error en la peticion'});
-        if(!usuarioActualizado) return res.status(404).send({message: 'No se encontraron usuarios'});
 
-        return res.status(200).send({empresa: usuarioActualizado});
-    });
+    Usuarios.findOne({nombre:parametros.nombre},(err,usuarioEncontrado)=>{
+
+        if(usuarioEncontrado==null){
+
+            Usuarios.findOne({usuario:parametros.usuario},(err,usuarioEncontradoUser)=>{
+                if(usuarioEncontradoUser==null){
+                    Usuarios.findByIdAndUpdate(idUsu, parametros, {new: true}, (err, usuarioActualizado) => {
+                        if(err) return res.status(500).send({message: 'Error en la peticion'});
+                        if(!usuarioActualizado) return res.status(404).send({message: 'No se encontraron usuarios'});
+                
+                        return res.status(200).send({empresa: usuarioActualizado});
+                    });
+                }else{
+                    return res.status(500).send({message: 'Este usuario ya esta siendo utilizado.'});
+     
+                }
+            });
+        }else{
+            return res.status(500).send({message: 'Este nombre ya esta siendo utilizado. '});
+        }
+    })
+
+
 }
 
 

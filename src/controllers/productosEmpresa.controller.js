@@ -6,15 +6,15 @@ function ObtenerProductosEmpresa(req, res) {
     var idEmpre = req.params.idEmpresa;
     if(req.user.rol == 'Empresa'){
         Productos.find({idEmpresa: req.user.sub}, (err, productoEncontrado) => {
-            if (err) return res.status(500).send({ mensaje: 'Error en la peticion' });
-            if (!productoEncontrado) return res.status(404).send( { mensaje: 'Esta empresa no tiene productos registrados aun' });
+            if (err) return res.status(500).send({ message: 'Error en la peticion' });
+            if (!productoEncontrado) return res.status(404).send( { message: 'Esta empresa no tiene productos registrados aun' });
     
             return res.status(200).send({ producto: productoEncontrado });
         });
     }else if(req.user.rol == 'ROL_ADMINISTRADOR'){
         Productos.find({idEmpresa: idEmpre}, (err, productoEncontrado) => {
-            if (err) return res.status(500).send({ mensaje: 'Error en la peticion' });
-            if (!productoEncontrado) return res.status(404).send( { mensaje: 'Esta empresa no tiene productos registrados aun' });
+            if (err) return res.status(500).send({ message: 'Error en la peticion' });
+            if (!productoEncontrado) return res.status(404).send( { message: 'Esta empresa no tiene productos registrados aun' });
     
             return res.status(200).send({ producto: productoEncontrado });
         });
@@ -24,11 +24,11 @@ function ObtenerProductosEmpresa(req, res) {
 function obtenerProductoPorId(req, res) {
     var idProd = req.params.idProducto;
     if(req.user.rol == 'ROL_ADMINISTRADOR'){
-        return res.status(500).send({ mensaje: 'No tienes permisos sobre esta empresa' });
+        return res.status(500).send({ message: 'No tienes permisos sobre esta empresa' });
     }else{
         Productos.findById({_id: idProd}, (err, productoEncontrado) => {
-            if (err) return res.status(500).send({ mensaje: 'Error en la peticion' });
-            if (!productoEncontrado) return res.status(404).send( { mensaje: 'Esta empresa no tiene productos registrados aun' });
+            if (err) return res.status(500).send({ message: 'Error en la peticion' });
+            if (!productoEncontrado) return res.status(404).send( { message: 'Esta empresa no tiene productos registrados aun' });
     
             return res.status(200).send({ producto: productoEncontrado });
         }); 
@@ -88,8 +88,8 @@ function EditarProductoEmpresa(req, res){
         })
     }else if(req.user.rol == 'ROL_ADMINISTRADOR'){
         Productos.findByIdAndUpdate({_id: idProd}, parametros,(err, productoEncontrado) => {
-            if (err) return res.status(500).send({ mensaje: 'Error en la peticion' });
-            if (!productoEncontrado) return res.status(404).send( { mensaje: 'Esta empresa no tiene productos registrados aun' });
+            if (err) return res.status(500).send({ message: 'Error en la peticion' });
+            if (!productoEncontrado) return res.status(404).send( { message: 'Esta empresa no tiene productos registrados aun' });
     
             return res.status(200).send({ producto: productoEncontrado });
         });
@@ -108,8 +108,8 @@ function EliminarProductoEmpresa(req, res){
         })
     }else if(req.user.rol == 'ROL_ADMINISTRADOR'){
         Productos.findByIdAndDelete({_id: idProd}, (err, productoEncontrado) => {
-            if (err) return res.status(500).send({ mensaje: 'Error en la peticion' });
-            if (!productoEncontrado) return res.status(404).send( { mensaje: 'Esta empresa no tiene productos registrados aun' });
+            if (err) return res.status(500).send({ message: 'Error en la peticion' });
+            if (!productoEncontrado) return res.status(404).send( { message: 'Esta empresa no tiene productos registrados aun' });
     
             return res.status(200).send({ producto: productoEncontrado });
         });

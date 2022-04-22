@@ -23,6 +23,14 @@ function ObtenerSucursales(req, res) {
     }
 } 
 
+function ObtenerSucursalesId(req, res) {
+    var idSucursal = req.params.id
+        Sucursales.findById(idSucursal, (err, sucursalEncontrada) => {
+            if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
+            if (!sucursalEncontrada) return res.status(404).send({ mensaje: "Error, no se encuentran empleado" });
+            return res.status(200).send({ Sucursal: sucursalEncontrada })
+        })
+}
 
 function AgregarSucursales(req, res){
     if(req.user.rol != 'Empresa') return res.status(500).send({mensaje: "Solo el ro Empresa puede agregar una nueva sucursal"})
@@ -104,5 +112,6 @@ module.exports = {
      ObtenerSucursales,
      AgregarSucursales,
      EditarSucursales,
-     EliminarSucursales
+     EliminarSucursales,
+     ObtenerSucursalesId
 }
