@@ -8,7 +8,6 @@ var productosEmpresaSchema = Schema({
     descripcion: String,
     NombreProveedor: String,
     Stock: Number,
-    vendido: Number,
     idEmpresa: { type: Schema.Types.ObjectId, ref: 'usuarios'}
 })
 

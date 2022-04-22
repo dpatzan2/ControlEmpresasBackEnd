@@ -32,6 +32,15 @@ function ObtenerUsuarios(req, res) {
     });
 } 
 
+function ObtenerUsuariosId(req, res) {
+    var idUsuario = req.params.id
+        Usuarios.findById(idUsuario, (err, empleadorEncontrado) => {
+            if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
+            if (!empleadorEncontrado) return res.status(404).send({ mensaje: "Error, no se encuentran empleado" });
+            return res.status(200).send({ empleadoEncontrado: empleadorEncontrado })
+        })
+}
+
 //METODO PARA PODER INICIAR SESION
 function Login(req, res) {
     var parameters = req.body
@@ -157,5 +166,6 @@ module.exports = {
     EditarUsuarios,
     EliminarUsuarios,
     ObtenerUsuarios,
-    AgregarEmpresasDesdeAdmin
+    AgregarEmpresasDesdeAdmin,
+    ObtenerUsuariosId
 }

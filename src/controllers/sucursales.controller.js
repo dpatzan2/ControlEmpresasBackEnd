@@ -2,11 +2,25 @@
 const Sucursales = require('../models/sucursales.model')
 
 function ObtenerSucursales(req, res) {
-    Sucursales.find({idEmpresa: req.user.sub},(err , sucursalesObtenidos) => {
-        if(err) return res.send({mensaje: "error:" + err})
+    idEmp = req.params.idSucursal;
+    console.log(req.user.rol)
+    if(req.user.rol == 'ROL_ADMINISTRADOR'){
+        console.log(req.user.rol)
+        Sucursales.find({idEmpresa: idEmp},(err , sucursalesObtenidos) => {
+            if(err) return res.send({mensaje: "error:" + err})
     
-        return res.send({Sucursales: sucursalesObtenidos})
-    });
+            console.log(sucursalesObtenidos )
+            console.log(req.user.rol)
+            return res.send({Sucursales: sucursalesObtenidos})
+        });
+    }else{
+        Sucursales.find({idEmpresa: req.user.sub},(err , sucursalesObtenidos) => {
+            if(err) return res.send({mensaje: "error:" + err})
+    
+            console.log(sucursalesObtenidos )
+            return res.send({Sucursales: sucursalesObtenidos})
+        });
+    }
 } 
 
 

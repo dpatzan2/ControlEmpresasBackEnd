@@ -5,7 +5,7 @@ const md_autentificacion = require('../middlewares/aut');
 var app = express.Router();
 
 //OBTENER SUCURSALES
-app.get('/sucursales', md_autentificacion.Auth,sucursalesController.ObtenerSucursales),
+app.get('/sucursales/:idSucursal?', md_autentificacion.Auth,sucursalesController.ObtenerSucursales),
 
 //AGREGAR SUCURSALES
 app.post('/agregarSucursales', md_autentificacion.Auth,sucursalesController.AgregarSucursales),
