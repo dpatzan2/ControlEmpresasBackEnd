@@ -121,12 +121,12 @@ function buscarPorNombre(req, res) {
     var nombreProducto = req.params.nombreProducto;
     if (req.user.rol == 'Empresa') {
         Productos.find({ NombreProducto: { $regex: nombreProducto, $options: ['i', 'x'] } }, (err, productoEncontrado) => {
-            if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
-            if (!productoEncontrado) return res.status(404).send({ mensaje: "Error, no se encuentran productos con ese nombre" });
+            if (err) return res.status(500).send({ message: "Error en la peticion" });
+            if (!productoEncontrado) return res.status(404).send({ message: "Error, no se encuentran productos con ese nombre" });
             return res.status(200).send({ productos: productoEncontrado });
         })
     } else {
-        return res.status(500).send({ mensaje: "No puede acceder como administrador" });
+        return res.status(500).send({ message: "No puede acceder como administrador" });
     }
 }
 
@@ -134,12 +134,12 @@ function obtenerProveedor(req, res) {
     var nombreProveedor = req.params.nombreProveedor;
     if (req.user.rol == 'Empresa') {
         Productos.find({ NombreProveedor: { $regex: nombreProveedor, $options: ['i', 'x'] } }, (err, productoEncontrado) => {
-            if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
-            if (!productoEncontrado) return res.status(404).send({ mensaje: "Error, no se encuentran productos con ese nombre" });
+            if (err) return res.status(500).send({ message: "Error en la peticion" });
+            if (!productoEncontrado) return res.status(404).send({ message: "Error, no se encuentran productos con ese nombre" });
             return res.status(200).send({ productos: productoEncontrado });
         })
     } else {
-        return res.status(500).send({ mensaje: "No puede acceder como administrador" });
+        return res.status(500).send({ message: "No puede acceder como administrador" });
     }
 
 }
