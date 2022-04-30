@@ -8,4 +8,15 @@ app.get('/productosSucursal/:idSucursal?', md_autentificacion.Auth, productosSuc
 app.post('/agregarProductoSucursal', md_autentificacion.Auth, productosSucursalController.agregarProductoSucursales)
 app.delete('/eliminarProductoSucursal/:idProductoSucursal', md_autentificacion.Auth, productosSucursalController.EliminarProductoSucursales)
 
+app.put('/venderProductosSucursal/:idSucursal', md_autentificacion.Auth, productosSucursalController.VenderProductosSucursales),
+
+//buscar por stock
+app.get('/obtenerStock', md_autentificacion.Auth, productosSucursalController.buscarPorStockMayorAMenor)
+app.get('/obtenerStockM', md_autentificacion.Auth, productosSucursalController.buscarPorStockMenorAMayor)
+
+
+// buscar por nombre
+app.get('/buscarSucursalPNombre/:nombreProducto', md_autentificacion.Auth, productosSucursalController.buscarPorNombre)
+
+
 module.exports = app;

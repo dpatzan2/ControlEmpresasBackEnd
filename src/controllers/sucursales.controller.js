@@ -25,7 +25,8 @@ function ObtenerSucursales(req, res) {
 
 function ObtenerSucursalesId(req, res) {
     var idSucursal = req.params.id
-        Sucursales.findById(idSucursal, (err, sucursalEncontrada) => {
+    console.log(req.user.sub)
+        Sucursales.findById({_id: idSucursal,idEmpresa: req.user.sub}, (err, sucursalEncontrada) => {
             if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
             if (!sucursalEncontrada) return res.status(404).send({ mensaje: "Error, no se encuentran empleado" });
             return res.status(200).send({ Sucursal: sucursalEncontrada })
@@ -76,7 +77,6 @@ function EditarSucursales(req, res){
     Sucursales.findOne({_id:idSuc},(err, sucursalExistente) =>{
         if(err || sucursalExistente === null) return res.status(500).send({mensaje: "La sucursal no existe, verifique el ID"})
 
-        if(parametros.idEmpresa) return res.status(500).send({mensaje: "No se puede editar los ID"})
 
         if(parametros.nombreSucursal || parametros.direccionSucursal || parametros.telefono){
     

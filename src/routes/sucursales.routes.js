@@ -11,12 +11,12 @@ app.get('/sucursales/:idSucursal?', md_autentificacion.Auth,sucursalesController
 app.post('/agregarSucursales', md_autentificacion.Auth,sucursalesController.AgregarSucursales),
 
 //EDITAR SUCURSALES
-app.put('/editarSucursales/:idSucursal', md_autentificacion.Auth,sucursalesController.EditarSucursales),
+app.put('/editarSucursales/:idSucursal?', md_autentificacion.Auth,sucursalesController.EditarSucursales),
 
 //ELIMINAR SUCURSALES
 app.delete('/eliminarSucursales/:idSucursal', md_autentificacion.Auth,sucursalesController.EliminarSucursales),
 
 
-app.get('/sucursalId/:id',md_autentificacion.Auth, sucursalesController.ObtenerSucursalesId),
+app.get('/sucursalId/:id?',md_autentificacion.Auth, sucursalesController.ObtenerSucursalesId),
 
 module.exports = app;

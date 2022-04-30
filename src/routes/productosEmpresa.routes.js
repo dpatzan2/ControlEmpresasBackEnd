@@ -10,4 +10,8 @@ app.post('/agregarProductoEmpresa', md_autentificacion.Auth, productosEmpresaCon
 app.delete('/eliminarProductoEmpresa/:idProducto', md_autentificacion.Auth, productosEmpresaController.EliminarProductoEmpresa)
 app.put('/editarProductoEmpresa/:idProducto?', md_autentificacion.Auth, productosEmpresaController.EditarProductoEmpresa)
 
+// buscar por nombre
+app.get('/obtenerPNombre/:nombreProducto', md_autentificacion.Auth, productosEmpresaController.buscarPorNombre)
+// buscar productos por proveedor
+app.get('/obtenerProveedor/:nombreProveedor', md_autentificacion.Auth, productosEmpresaController.obtenerProveedor)
 module.exports = app;

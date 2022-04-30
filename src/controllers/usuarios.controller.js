@@ -23,7 +23,7 @@ function registarAdminDefecto(req, res) {
 
 function ObtenerUsuarios(req, res) {
     Usuarios.find({rol: 'Empresa'},(err , usuariosObtenidos) => {
-        if(err) return res.send({mensaje: "error:" + err})
+        if(err) return res.send({message: "error:" + err})
     
         for (let i = 0; i < usuariosObtenidos.length; i++) {
         console.log(usuariosObtenidos[i].nombre)
@@ -35,8 +35,8 @@ function ObtenerUsuarios(req, res) {
 function ObtenerUsuariosId(req, res) {
     var idUsuario = req.params.id
         Usuarios.findById(idUsuario, (err, empleadorEncontrado) => {
-            if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
-            if (!empleadorEncontrado) return res.status(404).send({ mensaje: "Error, no se encuentran empleado" });
+            if (err) return res.status(500).send({ message: "Error en la peticion" });
+            if (!empleadorEncontrado) return res.status(404).send({ message: "Error, no se encuentran empleado" });
             return res.status(200).send({ empleadoEncontrado: empleadorEncontrado })
         })
 }
@@ -58,7 +58,7 @@ function Login(req, res) {
                             return res.status(200).send({ usuario: usuarioLogeado })
                         }
                     } else {
-                        return res.status(404).send({ message: "contrasena no coincide" });
+                        return res.status(404).send({ message: "Contraseña incorrecta" });
                     }
                 })
         } else {
@@ -80,23 +80,30 @@ function RegistrarEmpresas(req, res){
         Usuarios.find({usuario: parametros.usuario}, (err, usuarioEcontrado) => {
             if(usuarioEcontrado == 0){
 
-                brycpt.hash(parametros.password, null, null, (err, passwordEncriptada) => {
-                    usuarioModelo.password = passwordEncriptada;
+                Usuarios.findOne({nombre:parametros.nombre},(err,nombreEncontradoUser)=>{
+                    if(nombreEncontradoUser==null){
+                        brycpt.hash(parametros.password, null, null, (err, passwordEncriptada) => {
+                            usuarioModelo.password = passwordEncriptada;
+        
+                            usuarioModelo.save((err, usuarioGuardado) => {
+                                if(err) return res.status(500).send({message: 'Error en la peticion'});
+                                if(!usuarioGuardado) return res.status(404).send({message: 'No se encontraron usuarios'});
+                    
+                                return res.status(200).send({Empresa: usuarioGuardado});
+                            });
+                        });
+                    }else{
+                       return res.status(500).send({message: 'Este nombre ya esta siendo utilizado. '});
+                    }
+                })
 
-                    usuarioModelo.save((err, usuarioGuardado) => {
-                        if(err) return res.status(500).send({message: 'Error en la peticion'});
-                        if(!usuarioGuardado) return res.status(404).send({message: 'No se encontraron usuarios'});
-            
-                        return res.status(200).send({Empresa: usuarioGuardado});
-                    });
-                });
             }else{
-                return res.status(500).send({mensaje: 'Este usuario ya esta siendo utilizado, pruebe usando otro'});
+                return res.status(500).send({message: 'Este usuario ya esta siendo utilizado, pruebe usando otro'});
             } 
             
         })
     }else{
-        return res.status(500).send({mensaje: 'Llene todos los campos requeridos'});
+        return res.status(500).send({message: 'Llene todos los campos requeridos'});
     }
     
 }
@@ -123,12 +130,12 @@ function AgregarEmpresasDesdeAdmin(req, res){
                     });
                 });
             }else{
-                return res.status(500).send({mensaje: 'Este usuario ya esta siendo utilizado, pruebe usando otro'});
+                return res.status(500).send({message: 'Este usuario ya esta siendo utilizado, pruebe usando otro'});
             } 
             
         })
     }else{
-        return res.status(500).send({mensaje: 'Llene todos los campos requeridos'});
+        return res.status(500).send({message: 'Llene todos los campos requeridos'});
     }
 }
 
