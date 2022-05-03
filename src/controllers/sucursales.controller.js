@@ -25,10 +25,9 @@ function ObtenerSucursales(req, res) {
 
 function ObtenerSucursalesId(req, res) {
     var idSucursal = req.params.id
-    console.log(req.user.sub)
-        Sucursales.findById({_id: idSucursal,idEmpresa: req.user.sub}, (err, sucursalEncontrada) => {
+        Sucursales.findById(idSucursal, (err, sucursalEncontrada) => {
             if (err) return res.status(500).send({ message: "Error en la peticion" });
-            if (!sucursalEncontrada) return res.status(404).send({ message: "Error, no se encuentran empleado" });
+            if (!sucursalEncontrada) return res.status(404).send({ message: "Error, no se encuentran las sucursales" });
             return res.status(200).send({ Sucursal: sucursalEncontrada })
         })
 }
@@ -47,18 +46,24 @@ function AgregarSucursales(req, res){
 
         Sucursales.findOne({nombreSucursal: parametros.nombreSucursal, idEmpresa: req.user.sub}, (err, sucursalEncontrada)=>{
 
-            Sucursales.findOne({direccionSucursal: parametros.direccionSucursal, idEmpresa: req.user.sub}, (err, direccionEncontrada)=>{
+            Sucursales.findOne({telefono: parametros.telefono, idEmpresa: req.user.sub}, (err, telefonoEncontrado)=>{
 
-                if(sucursalEncontrada != null || direccionEncontrada != null) {
-                    return res.status(500).send({Message: 'Esta sucursal ya existe, ingrese otros datos para agregar'})
+                if(sucursalEncontrada != null ) {
+                    return res.status(500).send({message: 'El nombre ingresado ya existe. Verifique los datos'})
 
                 }else{
-                    SucursalesModel.save((err, SucursalGuardada)=>{
-                        if(err) return res.status(500).send({message: 'Error en la peticion'});
-                        if(!SucursalGuardada) return res.status(404).send({message: 'No se han podido guardar los datos'});
-                        
-                        return res.status(200).send({Sucursales: SucursalGuardada});
-                    });                }
+                    if(telefonoEncontrado != null){
+                        return res.status(500).send({message: 'El teléfono ingresado ya existe. Verifique los datos.'})
+
+                    }else{
+                        SucursalesModel.save((err, SucursalGuardada)=>{
+                            if(err) return res.status(500).send({message: 'Error en la peticion'});
+                            if(!SucursalGuardada) return res.status(404).send({message: 'No se han podido guardar los datos'});
+                            
+                            return res.status(200).send({Sucursales: SucursalGuardada});
+                        });   
+                    }
+             }
             });
 
         });
@@ -77,14 +82,31 @@ function EditarSucursales(req, res){
     Sucursales.findOne({_id:idSuc},(err, sucursalExistente) =>{
         if(err || sucursalExistente === null) return res.status(500).send({message: "La sucursal no existe, verifique el ID"})
 
-
         if(parametros.nombreSucursal || parametros.direccionSucursal || parametros.telefono){
     
-            Sucursales.findOneAndUpdate({_id:sucursalExistente._id,idEmpresa: req.user.sub},parametros, {new: true}, (err, sucursalEditada)=>{
-                if(err) return res.status(404).send({message: "Error al editar la sucursal"})
-                if(!sucursalEditada) return res.status(500).send({message: "No puede editar una sucursal que no le pertenezca"})
-                return res.status(200).send({Sucursales: sucursalEditada});
+            Sucursales.findOne({nombreSucursal: parametros.nombreSucursal, idEmpresa: req.user.sub}, (err, sucursalEncontrada)=>{
+
+                Sucursales.findOne({telefono: parametros.telefono, idEmpresa: req.user.sub}, (err, telefonoEncontrado)=>{
+    
+                    if(sucursalEncontrada != null && sucursalExistente.nombreSucursal!=parametros.nombreSucursal) {
+                        return res.status(500).send({message: 'El nombre ingresado ya existe. Verifique los datos'})
+    
+                    }else{
+                        if(telefonoEncontrado != null&& sucursalExistente.telefono!=parametros.telefono){
+                            return res.status(500).send({message: 'El teléfono ingresado ya existe. Verifique los datos.'})
+    
+                        }else{
+                            Sucursales.findOneAndUpdate({_id:sucursalExistente._id,idEmpresa: req.user.sub},parametros, {new: true}, (err, sucursalEditada)=>{
+                                if(err) return res.status(404).send({message: "Error al editar la sucursal"})
+                                if(!sucursalEditada) return res.status(500).send({message: "No puede editar una sucursal que no le pertenezca"})
+                                return res.status(200).send({Sucursales: sucursalEditada});
+                            }); 
+                        }
+                 }
+                });
+    
             });
+
             
         }
     })
