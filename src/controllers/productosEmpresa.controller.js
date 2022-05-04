@@ -83,52 +83,14 @@ function EditarProductoEmpresa(req, res) {
     if (req.user.rol == 'Empresa') {
         Productos.findOneAndUpdate({ _id: idProd, idEmpresa: req.user.sub }, parametros, (err, usuarioEliminado) => {
             if (err) return res.status(500).send({ message: 'Error en la peticion' });
-            if (!usuarioEliminado) return res.status(404).send({ message: 'No se puede editar un producto que no le perteneza' });
-            function agregarProductoEmpresa(req, res) {
-                var parametros = req.body;
-                console.log(parametros);
-                var ProductosEmpresaModelo = new Productos();
-                if (req.user.rol == 'ROL_ADMINISTRADOR') {
-                    return res.status(500).send({ message: 'Un administrador no puede realizar esta acción' });
-                } else {
-                    if (parametros.NombreProducto && parametros.descripcion && parametros.NombreProveedor) {
-                        ProductosEmpresaModelo.NombreProducto = parametros.NombreProducto;
-                        ProductosEmpresaModelo.descripcion = parametros.descripcion;
-                        ProductosEmpresaModelo.NombreProveedor = parametros.NombreProveedor;
-                        if (parametros.Stock == 0) {
-                            ProductosEmpresaModelo.Stock = 0;
-                        } else {
-                            ProductosEmpresaModelo.Stock = parametros.Stock;
-                        }
-            
-                        ProductosEmpresaModelo.idEmpresa = req.user.sub;
-            
-                        Productos.find({ NombreProducto: parametros.NombreProducto, idEmpresa: req.user.sub }, (err, productoEncontrado) => {
-                            if (productoEncontrado == 0) {
-                                ProductosEmpresaModelo.save((err, ProductoGuardado) => {
-                                    if (err) return res.status(500).send({ message: 'Error en la peticion' });
-                                    if (!ProductoGuardado) return res.status(404).send({ message: 'No se encontraron productos para esta empresa' });
-                                    console.log(productoEncontrado)
-                                    return res.status(200).send({ Productos: ProductoGuardado });
-                                });
-                            } else {
-                                return res.status(500).send({ message: 'Este producto existe' })
-                            }
-                        });
-            
-                    } else {
-                        console.log('no se guarda')
-                        return res.status(500).send({ message: 'Error en la peticion' });
-                    }
-                }
-            
-            }
+            if (!usuarioEliminado) return res.status(404).send({ message: 'No se puede editar un producto que no te perteneza' });
+
             return res.status(200).send({ usuarios: usuarioEliminado });
         })
     } else if (req.user.rol == 'ROL_ADMINISTRADOR') {
         Productos.findByIdAndUpdate({ _id: idProd }, parametros, (err, productoEncontrado) => {
             if (err) return res.status(500).send({ message: 'Error en la peticion' });
-            if (!productoEncontrado) return res.status(404).send({ message: 'Esta empresa no tiene productos registrados ' });
+            if (!productoEncontrado) return res.status(404).send({ message: 'Esta empresa no tiene productos registrados aun' });
 
             return res.status(200).send({ producto: productoEncontrado });
         });
