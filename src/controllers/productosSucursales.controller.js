@@ -147,7 +147,7 @@ function VenderProductosSucursales(req, res) {
                         var restarStockSucursal = (parametros.Vendido * -1)
                         //EDITAR STOCK DE RODUCTO SUCURSAL
                          ProductosSucursales.findOneAndUpdate({ _id: productoEncontradoSucursal._id }, { $inc: { StockSucursal: restarStockSucursal,Vendido:parametros.Vendido } }, { new: true }, (err, productoSucursalEditado) => {
-                             console.log(err)
+                             //console.log(err)
                              if (err) return res.status(500).send({ message: 'Error en la peticion de editar producto sucursal' });
                             if (!productoSucursalEditado) return res.status(404).send({ message: 'No se encontraron productos para editar en sucursal' });
                             return res.status(200).send({ ProductosSucursal: productoSucursalEditado });
@@ -164,12 +164,12 @@ function buscarPorNombre(req, res){
     var nombreProducto = req.params.nombreProducto;
     if(req.user.rol == 'Empresa'){
         ProductosSucursales.find({NombreProductoSucursal: {$regex:nombreProducto,$options:['i','x']}}, (err, productoEncontrado) =>{
-            if(err) return res.status(500).send({ mensaje: "Error en la peticion"});
-             if(!productoEncontrado) return res.status(404).send({mensaje : "Error, no se encuentran productos con ese nombre"});
+            if(err) return res.status(500).send({ message: "Error en la peticion"});
+             if(!productoEncontrado) return res.status(404).send({message : "Error, no se encuentran productos con ese nombre"});
              return res.status(200).send({productos : productoEncontrado});
          })
     }else {
-         return res.status(500).send({ mensaje: "Error en la peticion"});
+         return res.status(500).send({ message: "Error en la peticion"});
     }
   
 }
@@ -177,13 +177,14 @@ function buscarPorNombre(req, res){
 
 function buscarPorStockMenorAMayor(req,res){
     var idSucursal = req.params.idSucursal;
-    console.log(idSucursal);
-    console.log(req.user.sub)
+    //console.log(idSucursal);
+    //console.log(req.user.sub)
     ProductosSucursales.find({idEmpresa: req.user.sub, idSucursal: idSucursal},(err,productoVendido) => {
-        if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
-        if (!productoVendido) return res.status(500).send({ mensaje: 'Error al encontrar producto vendido' });
+        if (err) return res.status(500).send({ message: "Error en la peticion" });
+        if (!productoVendido) return res.status(500).send({ message: 'Error al encontrar producto vendido' });
+        if (productoVendido.length==0) return res.status(500).send({ message: 'No existen productos en la sucursal',informacion: 'Debe agregar productos'  });
 
-        console.log(productoVendido)
+        //console.log(productoVendido)
         return res.status(200).send({menorMayor: productoVendido})
     }).sort({
         StockSucursal : 1
@@ -192,8 +193,10 @@ function buscarPorStockMenorAMayor(req,res){
 function buscarPorStockMayorAMenor(req,res){
     var idSucursal = req.params.idSucursal;
     ProductosSucursales.find({idEmpresa: req.user.sub, idSucursal: idSucursal},(err,productoVendido) => {
-        if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
-        if (!productoVendido) return res.status(500).send({ mensaje: 'Error al encontrar producto vendido' });
+        if (err) return res.status(500).send({ message: "Error en la peticion" });
+        if (!productoVendido) return res.status(500).send({ message: 'Error al encontrar producto vendido' });
+        if (productoVendido.length==0) return res.status(500).send({ message: 'No existen productos en la sucursal',informacion: 'Debe agregar productos'  });
+
         return res.status(200).send({mayorMenor: productoVendido})
     }).sort({
         StockSucursal : -1
@@ -208,4 +211,5 @@ module.exports = {
     buscarPorNombre,
     buscarPorStockMenorAMayor,
     buscarPorStockMayorAMenor
-}
+} 
+

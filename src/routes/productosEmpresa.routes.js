@@ -14,4 +14,9 @@ app.put('/editarProductoEmpresa/:idProducto?', md_autentificacion.Auth, producto
 app.get('/obtenerPNombre/:nombreProducto', md_autentificacion.Auth, productosEmpresaController.buscarPorNombre)
 // buscar productos por proveedor
 app.get('/obtenerProveedor/:nombreProveedor', md_autentificacion.Auth, productosEmpresaController.obtenerProveedor)
+
+//buscar por stock
+app.get('/obtenerStockEmpresa/:idEmpresa', md_autentificacion.Auth, productosEmpresaController.buscarPorStockMayorAMenor)
+app.get('/obtenerStockEmpresaM/:idEmpresa', md_autentificacion.Auth, productosEmpresaController.buscarPorStockMenorAMayor)
+
 module.exports = app;

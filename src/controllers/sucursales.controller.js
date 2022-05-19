@@ -3,21 +3,24 @@ const Sucursales = require('../models/sucursales.model')
 
 function ObtenerSucursales(req, res) {
     idEmp = req.params.idSucursal;
-    console.log(req.user.rol)
+    // createconsole.log(req.user.rol)
     if(req.user.rol == 'ROL_ADMINISTRADOR'){
-        console.log(req.user.rol)
+        //console.log(req.user.rol)
         Sucursales.find({idEmpresa: idEmp},(err , sucursalesObtenidos) => {
             if(err) return res.send({message: "error:" + err})
+            if(sucursalesObtenidos.length==0) return res.status(400).send({message: "Actualemnte no existen sucursales", informacion:"Cada empresa debe gestionar sus sucursales"})
+
     
-            console.log(sucursalesObtenidos )
-            console.log(req.user.rol)
+            //console.log(sucursalesObtenidos )
+            //console.log(req.user.rol)
             return res.send({Sucursales: sucursalesObtenidos})
         });
     }else{
         Sucursales.find({idEmpresa: req.user.sub},(err , sucursalesObtenidos) => {
             if(err) return res.send({message: "error:" + err})
-    
-            console.log(sucursalesObtenidos )
+            if(sucursalesObtenidos.length==0) return res.status(400).send({message: "Actualemnte no existen sucursales", informacion:"Cada empresa debe gestionar sus sucursales"})
+
+            //console.log(sucursalesObtenidos )
             return res.send({Sucursales: sucursalesObtenidos})
         });
     }

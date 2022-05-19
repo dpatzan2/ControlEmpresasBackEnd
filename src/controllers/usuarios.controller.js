@@ -26,8 +26,11 @@ function ObtenerUsuarios(req, res) {
         if (err) return res.send({ message: "error:" + err })
 
         for (let i = 0; i < usuariosObtenidos.length; i++) {
-            console.log(usuariosObtenidos[i].nombre)
+            //console.log(usuariosObtenidos[i].nombre)
         }
+
+        if(usuariosObtenidos.length==0) return res.status(400).send({message: "Actualmente no existen empresas", informacion:"Debe registrar empresas"})
+
         return res.send({ Empresas: usuariosObtenidos })
     });
 }

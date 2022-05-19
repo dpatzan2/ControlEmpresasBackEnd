@@ -181,6 +181,34 @@ function obtenerProveedor(req, res) {
 
 }
 
+function buscarPorStockMenorAMayor(req,res){
+    var idEmpresa = req.params.idEmpresa;
+    //console.log(idEmpresa);
+    //console.log(req.user.sub)
+    Productos.find({idEmpresa: req.user.sub, idEmpresa: idEmpresa},(err,productoVendido) => {
+        if (err) return res.status(500).send({ message: "Error en la peticion" });
+        if (!productoVendido) return res.status(500).send({ message: 'Error al encontrar producto vendido' });
+        if (productoVendido.length==0) return res.status(500).send({ message: 'No existen productos en la empresa', informacion: 'Debe agregar productos' });
+
+        //console.log(productoVendido)
+        return res.status(200).send({menorMayor: productoVendido})
+    }).sort({
+        Stock : 1
+    })
+}
+function buscarPorStockMayorAMenor(req,res){
+    var idEmpresa = req.params.idEmpresa;
+    Productos.find({idEmpresa: req.user.sub, idEmpresa: idEmpresa},(err,productoVendido) => {
+        if (err) return res.status(500).send({ message: "Error en la peticion" });
+        if (!productoVendido) return res.status(500).send({ message: 'Error al encontrar producto vendido' });
+        if (productoVendido.length==0) return res.status(500).send({ message: 'No existen productos en la empresa', informacion: 'Debe agregar productos' });
+
+        return res.status(200).send({mayorMenor: productoVendido})
+    }).sort({
+        Stock : -1
+    })
+}
+
 module.exports = {
     ObtenerProductosEmpresa,
     agregarProductoEmpresa,
@@ -188,5 +216,7 @@ module.exports = {
     EditarProductoEmpresa,
     obtenerProductoPorId,
     buscarPorNombre,
-    obtenerProveedor
+    obtenerProveedor,
+    buscarPorStockMenorAMayor,
+    buscarPorStockMayorAMenor
 }

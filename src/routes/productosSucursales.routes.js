@@ -15,7 +15,7 @@ app.get('/obtenerStock/:idSucursal', md_autentificacion.Auth, productosSucursalC
 app.get('/obtenerStockM/:idSucursal', md_autentificacion.Auth, productosSucursalController.buscarPorStockMenorAMayor)
 
 
-// buscar por nombre
+// buscar por nombrezzz
 app.get('/buscarSucursalPNombre/:nombreProducto', md_autentificacion.Auth, productosSucursalController.buscarPorNombre)
 
 
