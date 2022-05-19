@@ -176,19 +176,25 @@ function buscarPorNombre(req, res){
 
 
 function buscarPorStockMenorAMayor(req,res){
-    ProductosSucursales.find((err,productoVendido) => {
+    var idSucursal = req.params.idSucursal;
+    console.log(idSucursal);
+    console.log(req.user.sub)
+    ProductosSucursales.find({idEmpresa: req.user.sub, idSucursal: idSucursal},(err,productoVendido) => {
         if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
         if (!productoVendido) return res.status(500).send({ mensaje: 'Error al encontrar producto vendido' });
-        return res.status(200).send({"El orden del stock de los productos son": productoVendido})
+
+        console.log(productoVendido)
+        return res.status(200).send({menorMayor: productoVendido})
     }).sort({
-        StockSucursal : +1
+        StockSucursal : 1
     })
 }
 function buscarPorStockMayorAMenor(req,res){
-    ProductosSucursales.find((err,productoVendido) => {
+    var idSucursal = req.params.idSucursal;
+    ProductosSucursales.find({idEmpresa: req.user.sub, idSucursal: idSucursal},(err,productoVendido) => {
         if (err) return res.status(500).send({ mensaje: "Error en la peticion" });
         if (!productoVendido) return res.status(500).send({ mensaje: 'Error al encontrar producto vendido' });
-        return res.status(200).send({"El orden del stock de los productos son": productoVendido})
+        return res.status(200).send({mayorMenor: productoVendido})
     }).sort({
         StockSucursal : -1
     })

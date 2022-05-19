@@ -42,6 +42,16 @@ function ObtenerUsuariosId(req, res) {
 }
 
 
+function ObtenerUserLogueado(req, res) {
+
+    Usuarios.findOne({_id: req.user.sub}, (err, UserLogin) => {
+        if (err) return res.status(500).send({ message: "Error en la peticion" });
+        if (!UserLogin) return res.status(404).send({ message: "Error, no se encuentran empleado" });
+        return res.status(200).send({ usuario: UserLogin })
+    })
+}
+
+
 //METODO PARA PODER INICIAR SESION
 function Login(req, res) {
     var parameters = req.body
@@ -62,7 +72,7 @@ function Login(req, res) {
                     }
                 })
         } else {
-            return res.status(404).send({ message: "Error, datos erroneos" });
+            return res.status(404).send({ message: "Usuario incorrecto, verifique los datos." });
         }
     })
 }
@@ -228,5 +238,6 @@ module.exports = {
     EliminarUsuarios,
     ObtenerUsuarios,
     AgregarEmpresasDesdeAdmin,
-    ObtenerUsuariosId
+    ObtenerUsuariosId,
+    ObtenerUserLogueado
 }

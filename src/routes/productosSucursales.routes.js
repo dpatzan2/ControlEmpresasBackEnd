@@ -11,8 +11,8 @@ app.delete('/eliminarProductoSucursal/:idProductoSucursal', md_autentificacion.A
 app.put('/venderProductosSucursal/:idSucursal', md_autentificacion.Auth, productosSucursalController.VenderProductosSucursales),
 
 //buscar por stock
-app.get('/obtenerStock', md_autentificacion.Auth, productosSucursalController.buscarPorStockMayorAMenor)
-app.get('/obtenerStockM', md_autentificacion.Auth, productosSucursalController.buscarPorStockMenorAMayor)
+app.get('/obtenerStock/:idSucursal', md_autentificacion.Auth, productosSucursalController.buscarPorStockMayorAMenor)
+app.get('/obtenerStockM/:idSucursal', md_autentificacion.Auth, productosSucursalController.buscarPorStockMenorAMayor)
 
 
 // buscar por nombre
