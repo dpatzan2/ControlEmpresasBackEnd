@@ -29,8 +29,6 @@ function ObtenerUsuarios(req, res) {
             //console.log(usuariosObtenidos[i].nombre)
         }
 
-        if(usuariosObtenidos.length==0) return res.status(400).send({message: "Actualmente no existen empresas", informacion:"Debe registrar empresas"})
-
         return res.send({ Empresas: usuariosObtenidos })
     });
 }
@@ -39,7 +37,7 @@ function ObtenerUsuariosId(req, res) {
     var idUsuario = req.params.id
     Usuarios.findById(idUsuario, (err, empleadorEncontrado) => {
         if (err) return res.status(500).send({ message: "Error en la peticion" });
-        if (!empleadorEncontrado) return res.status(404).send({ message: "Error, no se encuentran empleado" });
+        if (!empleadorEncontrado) return res.status(404).send({ message: "Error, no se encuentran usuarios" });
         return res.status(200).send({ empleadoEncontrado: empleadorEncontrado })
     })
 }
@@ -49,7 +47,7 @@ function ObtenerUserLogueado(req, res) {
 
     Usuarios.findOne({_id: req.user.sub}, (err, UserLogin) => {
         if (err) return res.status(500).send({ message: "Error en la peticion" });
-        if (!UserLogin) return res.status(404).send({ message: "Error, no se encuentran empleado" });
+        if (!UserLogin) return res.status(404).send({ message: "Error, no se encuentran usuarios" });
         return res.status(200).send({ usuario: UserLogin })
     })
 }
@@ -90,8 +88,9 @@ function RegistrarEmpresas(req, res) {
         usuarioModelo.usuario = parametros.usuario;
         usuarioModelo.rol = 'Empresa';
 
-        Usuarios.find({ usuario: parametros.usuario }, (err, usuarioEcontrado) => {
-            if (usuarioEcontrado == 0) {
+        Usuarios.findOne({ usuario: parametros.usuario }, (err, usuarioEcontrado) => {
+
+            if (usuarioEcontrado==null) {
 
                 Usuarios.findOne({ nombre: parametros.nombre }, (err, nombreEncontradoUser) => {
                     if (nombreEncontradoUser == null) {
@@ -111,7 +110,7 @@ function RegistrarEmpresas(req, res) {
                 })
 
             } else {
-                return res.status(500).send({ message: 'Este usuario ya esta siendo utilizado, pruebe usando otro' });
+                return res.status(400).send({ message: 'Este usuario ya esta siendo utilizado, pruebe usando otro' });
             }
 
         })
@@ -130,8 +129,8 @@ function AgregarEmpresasDesdeAdmin(req, res) {
         usuarioModelo.tipoEmpresa = parametros.tipoEmpresa
         usuarioModelo.usuario = parametros.usuario;
         usuarioModelo.rol = 'Empresa';
-        Usuarios.find({ usuario: parametros.usuario }, (err, usuarioEcontrado) => {
-            if (usuarioEcontrado == 0) {
+        Usuarios.findOne({ usuario: parametros.usuario }, (err, usuarioEcontrado) => {
+            if (usuarioEcontrado== null) {
                 bcrypt.hash(parametros.password, null, null, (err, passwordEncriptada) => {
                     usuarioModelo.password = passwordEncriptada;
 
@@ -143,7 +142,7 @@ function AgregarEmpresasDesdeAdmin(req, res) {
                     });
                 });
             } else {
-                return res.status(500).send({ message: 'Este usuario ya esta siendo utilizado, pruebe usando otro' });
+                return res.status(400).send({ message: 'Este usuario ya esta siendo utilizado, pruebe usando otro.' });
             }
 
         })

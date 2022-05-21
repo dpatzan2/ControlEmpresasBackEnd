@@ -4,11 +4,12 @@ const Sucursales = require('../models/sucursales.model')
 function ObtenerSucursales(req, res) {
     idEmp = req.params.idSucursal;
     // createconsole.log(req.user.rol)
+
+
     if(req.user.rol == 'ROL_ADMINISTRADOR'){
         //console.log(req.user.rol)
         Sucursales.find({idEmpresa: idEmp},(err , sucursalesObtenidos) => {
             if(err) return res.send({message: "error:" + err})
-            if(sucursalesObtenidos.length==0) return res.status(400).send({message: "Actualemnte no existen sucursales", informacion:"Cada empresa debe gestionar sus sucursales"})
 
     
             //console.log(sucursalesObtenidos )
@@ -18,7 +19,6 @@ function ObtenerSucursales(req, res) {
     }else{
         Sucursales.find({idEmpresa: req.user.sub},(err , sucursalesObtenidos) => {
             if(err) return res.send({message: "error:" + err})
-            if(sucursalesObtenidos.length==0) return res.status(400).send({message: "Actualemnte no existen sucursales", informacion:"Cada empresa debe gestionar sus sucursales"})
 
             //console.log(sucursalesObtenidos )
             return res.send({Sucursales: sucursalesObtenidos})
@@ -29,7 +29,7 @@ function ObtenerSucursales(req, res) {
 function ObtenerSucursalesId(req, res) {
     var idSucursal = req.params.id
         Sucursales.findById(idSucursal, (err, sucursalEncontrada) => {
-            if (err) return res.status(500).send({ message: "Error en la peticion" });
+            if (err) return res.status(500).send({ message: "Error en la peticion"+err });
             if (!sucursalEncontrada) return res.status(404).send({ message: "Error, no se encuentran las sucursales" });
             return res.status(200).send({ Sucursal: sucursalEncontrada })
         })

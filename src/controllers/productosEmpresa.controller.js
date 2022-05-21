@@ -7,14 +7,12 @@ function ObtenerProductosEmpresa(req, res) {
     if (req.user.rol == 'Empresa') {
         Productos.find({ idEmpresa: req.user.sub }, (err, productoEncontrado) => {
             if (err) return res.status(500).send({ message: 'Error en la peticion' });
-            if (!productoEncontrado) return res.status(404).send({ message: 'Esta empresa no tiene productos registrados' });
 
             return res.status(200).send({ producto: productoEncontrado });
         });
     } else if (req.user.rol == 'ROL_ADMINISTRADOR') {
         Productos.find({ idEmpresa: idEmpre }, (err, productoEncontrado) => {
             if (err) return res.status(500).send({ message: 'Error en la peticion' });
-            if (!productoEncontrado) return res.status(404).send({ message: 'Esta empresa no tiene productos registrados ' });
 
             return res.status(200).send({ producto: productoEncontrado });
         });
