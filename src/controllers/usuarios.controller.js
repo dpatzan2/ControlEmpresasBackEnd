@@ -209,11 +209,6 @@ function EditarUsuarios(req, res) {
         }
 
     })
-
-
-
-
-
 }
 
 

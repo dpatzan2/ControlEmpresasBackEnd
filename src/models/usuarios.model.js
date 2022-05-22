@@ -9,6 +9,7 @@ var usuariosSchema = Schema({
     password: String,
     rol: String,
     usuario: String,
+    descripcion:String,
 })
 
 module.exports=mongoose.model('usuarios',usuariosSchema)
